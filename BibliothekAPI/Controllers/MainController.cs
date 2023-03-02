@@ -9,10 +9,10 @@ namespace BibliothekAPI.Controllers
     public class MainController : ControllerBase
     {
         // GET
-        [HttpGet]
-        public void Get()
+        [HttpGet("test")]
+        public string Get()
         {
-
+            return "Test";
         }
 
 
