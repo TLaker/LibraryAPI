@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Newtonsoft.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BibliothekAPI.Controllers
 {
@@ -15,37 +15,37 @@ namespace BibliothekAPI.Controllers
             return "Test";
         }
 
-
-        //// GET: api/<MainController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<MainController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<MainController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<MainController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<MainController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        //Get data
+        [HttpGet("{libraryName}/{mediumId}")]
+        public async Task<ActionResult<Medium>> GetDataFromLibrary(string libraryName, int mediumId)
+        {
+            var list = new List<Medium>();
+            switch (libraryName)
+            {
+                case "Herforder Bibliothek":
+                    var her = new HerfordData();
+                    list.AddRange(new List<Medium>() { her.m1, her.m2, her.m3, her.m4 });
+                    foreach(var obj in list)
+                    {
+                        if (obj.Id == mediumId)
+                        {
+                            return obj;
+                        }
+                    }
+                    return StatusCode(404);
+                case "Kölner Stadtbibliothek":
+                    var col = new CologneData();
+                    list.AddRange(new List<Medium>() { col.m1, col.m2, col.m3, col.m4 });
+                    foreach(var obj in list)
+                    {
+                        if(obj.Id == mediumId)
+                        {
+                            return obj;
+                        }
+                    }
+                    return StatusCode(404);
+                default: return StatusCode(404);
+            }
+        }
     }
 }
